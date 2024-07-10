@@ -1,8 +1,10 @@
+from tts import tts
+
+
 class CommandProcessor:
     def __init__(
         self,
         voice_recognition,
-        text_to_speech,
         web_search,
         reminder_system,
         todo_list,
@@ -10,10 +12,8 @@ class CommandProcessor:
         jokes,
         math_operations,
         news_update,
-        email_manager,
     ):
         self.voice_recognition = voice_recognition
-        self.text_to_speech = text_to_speech
         self.web_search = web_search
         self.reminder_system = reminder_system
         self.todo_list = todo_list
@@ -21,11 +21,22 @@ class CommandProcessor:
         self.jokes = jokes
         self.math_operations = math_operations
         self.news_update = news_update
-        self.email_manager = email_manager
 
     def process_command(self, command):
         if "search" in command:
-            self.web_search.search(command)
+            print("Searching...")
+            result = self.web_search.verify_query(command)
+            # format as website name then content
+            results = []
+            for r in result:
+                # print the title and the content
+                results.append([r["title"], r["body"]])
+
+            # use tts to read the results
+            if results:
+                for r in results:
+                    tts(r[0])
+
         elif "reminder" in command:
             self.reminder_system.set_reminder(command)
         elif "todo" in command:
@@ -38,10 +49,6 @@ class CommandProcessor:
             self.math_operations.calculate(command)
         elif "news" in command:
             self.news_update.get_news(command)
-        elif "email" in command:
-            self.email_manager.send_email(command)
-        elif "exit" in command:
-            self.text_to_speech.speak("Goodbye!")
-            exit()
-        else:
-            self.text_to_speech.speak("Sorry, I didn't understand that command.")
+        elif "stop" or "exit" in command:
+            tts("Goodbye!")
+            exit(1)
