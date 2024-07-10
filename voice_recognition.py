@@ -55,4 +55,9 @@ class VoiceRecognition:
                     print(self.recognizer.PartialResult())
 
     def detect_wake_word(self, text):
-        return self.wake_word.lower() in text.lower()
+        if (
+            len(self.wake_word.split()) > 1
+        ):  # longer than two words then split the wake word
+            return all(word.lower() in text.lower() for word in self.wake_word.split())
+        else:
+            return self.wake_word.lower() in text.lower()
