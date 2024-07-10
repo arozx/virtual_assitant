@@ -9,3 +9,7 @@ __pycache__/
 
 # Ignore virtual environments
 venv/
+
+# Ignore vosk model
+model/
+vosk-model-en-us-0.42-gigaspeech/
