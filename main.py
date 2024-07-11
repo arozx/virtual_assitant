@@ -1,3 +1,7 @@
+import os
+
+from dotenv import load_dotenv
+
 from commands import CommandProcessor
 from jokes import Jokes
 from math_operations import MathOperations
@@ -12,10 +16,14 @@ from web import WebSearch
 def main():
     vr = VoiceRecognition(wake_word="Hey Assistant")
 
+    # Load environment variables
+    load_dotenv()
+    WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
+
     web_search = WebSearch(api_key="YOUR_API_KEY")
     reminder_system = ReminderSystem()
     todo_list = TodoList()
-    weather_update = WeatherUpdate(api_key="YOUR_API_KEY")
+    weather_update = WeatherUpdate(WEATHER_API_KEY)
     jokes = Jokes(api_key="YOUR_API_KEY")
     math_operations = MathOperations()
     news_update = NewsUpdate(api_key="YOUR_API_KEY")

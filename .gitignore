@@ -13,3 +13,6 @@ venv/
 # Ignore vosk model
 model/
 vosk-model-en-us-0.42-gigaspeech/
+
+# Ignore environment variables
+.env
