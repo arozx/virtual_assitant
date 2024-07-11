@@ -1,3 +1,7 @@
+import json
+
+import spacy
+
 from tts import tts
 
 
@@ -22,6 +26,45 @@ class CommandProcessor:
         self.math_operations = math_operations
         self.news_update = news_update
 
+        self.nlp = spacy.load("en_core_web_sm")  # Load the English model
+
+        # Define the path to your JSON file
+        json_file = "places_gb.json"
+
+        # Initialize an empty dictionary to store the loaded data
+        self.known_locations = {}
+
+        # Load data from JSON file into Python dictionary
+        with open(json_file, "r", encoding="utf-8") as f:
+            self.known_locations = json.load(f)
+
+    def extract_locations(self, text):
+        # Process the text with spaCy
+        doc = self.nlp(text)
+
+        # Extract known locations
+        for token in doc:
+            if token.text.lower() in self.known_locations:
+                print("Known location found:", token.text.lower())
+                # return location and longitude and latitude from the JSON file
+                print(
+                    "this: ",
+                    [token.text.lower(), self.known_locations[token.text.lower()]],
+                )
+                print(
+                    "weather",
+                    token.text.lower(),
+                    self.known_locations[token.text.lower()].get("latitude"),
+                    self.known_locations[token.text.lower()].get("longitude"),
+                    "end",
+                )
+                # return the location, latitude and longitude individually
+                return (
+                    token.text.lower(),
+                    self.known_locations[token.text.lower()].get("latitude"),
+                    self.known_locations[token.text.lower()].get("longitude"),
+                )
+
     def process_command(self, command):
         if "search" in command:
             print("Searching...")
@@ -42,7 +85,11 @@ class CommandProcessor:
         elif "todo" in command:
             self.todo_list.add_task(command)
         elif "weather" in command:
-            self.weather_update.get_weather(command)
+            # Extract the location from the command
+            locations, latitudes, longitudes = self.extract_locations(command)
+            if locations:
+                self.weather_update.get_weather(locations, latitudes, longitudes)
+
         elif "joke" in command:
             self.jokes.tell_joke()
         elif "calculate" in command:
