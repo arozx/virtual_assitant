@@ -91,7 +91,14 @@ class CommandProcessor:
                 self.weather_update.get_weather(locations, latitudes, longitudes)
 
         elif "joke" in command:
-            self.jokes.tell_joke()
+            joke = self.jokes.get_joke()
+            # split into setup and delivery or just return the joke
+            if "..." in joke:
+                setup, delivery = joke.split("... ")
+                tts(setup)
+                tts(delivery)
+            else:
+                tts(joke)
         elif "calculate" in command:
             self.math_operations.calculate(command)
         elif "news" in command:

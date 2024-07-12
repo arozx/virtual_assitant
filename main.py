@@ -24,7 +24,7 @@ def main():
     reminder_system = ReminderSystem()
     todo_list = TodoList()
     weather_update = WeatherUpdate(WEATHER_API_KEY)
-    jokes = Jokes(api_key="YOUR_API_KEY")
+    jokes = Jokes()
     math_operations = MathOperations()
     news_update = NewsUpdate(api_key="YOUR_API_KEY")
 

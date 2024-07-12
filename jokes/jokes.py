@@ -1,7 +1,14 @@
-class Jokes:
-    def __init__(self, api_key: str):
-        self.api_key = api_key
+import requests
 
+
+class Jokes:
     def get_joke(self) -> str:
         # Fetches a random joke
-        pass
+        r = requests.get("https://v2.jokeapi.dev/joke/Any")
+        # return the joke then the punchline
+
+        r = r.json()
+        if r["type"] == "single":
+            return r["joke"]
+        else:
+            return f"{r['setup']}... {r['delivery']}"
