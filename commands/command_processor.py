@@ -78,7 +78,7 @@ class CommandProcessor:
             # use tts to read the results
             if results:
                 for r in results:
-                    tts(r[0])
+                    self.read(r[0])
 
         elif "reminder" in command:
             self.reminder_system.set_reminder(command)
@@ -95,14 +95,48 @@ class CommandProcessor:
             # split into setup and delivery or just return the joke
             if "..." in joke:
                 setup, delivery = joke.split("... ")
-                tts(setup)
-                tts(delivery)
+                self.read(setup)
+                self.read(delivery)
             else:
-                tts(joke)
+                self.read(joke)
         elif "calculate" in command:
             self.math_operations.calculate(command)
+
         elif "news" in command:
-            self.news_update.get_news(command)
+            """
+            if "from" not in command:
+                # get date in 2024-07-13 format
+                date = datetime.now().strftime("%Y-%m-%d")
+                # current - 3months
+                to_date = datetime.now() - timedelta(days=90)
+                to_date = to_date.strftime("%Y-%m-%d")
+                news = self.news_update.fetch_news(command, from_date=date)
+            else:
+                print("date found")
+            """
+
+            news = self.news_update.fetch_news(command)
+            news = self.news_update.parse_news(news)
+            # read the news
+            for n in news:
+                self.read(n["publishedAt"])
+                self.read(n["title"])
+                self.read(n["content"])
+
+        """
         elif "stop" or "exit" in command:
             tts("Goodbye!")
+            exit(1)
+        """
+
+    def read(self, data: str):
+        # read in new process so that it can be stopped by keyboard interrupt
+        try:
+            tts(data)
+        except KeyboardInterrupt:
+            print("Interrupted")
+            exit(1)
+        except Exception as e:
+            print("Error:", e)
+            tts("Sorry, I couldn't read that.")
             exit(1)
