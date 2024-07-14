@@ -101,8 +101,30 @@ class CommandProcessor:
                 tts(joke)
         elif "calculate" in command:
             self.math_operations.calculate(command)
+
         elif "news" in command:
-            self.news_update.get_news(command)
+            """
+            if "from" not in command:
+                # get date in 2024-07-13 format
+                date = datetime.now().strftime("%Y-%m-%d")
+                # current - 3months
+                to_date = datetime.now() - timedelta(days=90)
+                to_date = to_date.strftime("%Y-%m-%d")
+                news = self.news_update.fetch_news(command, from_date=date)
+            else:
+                print("date found")
+            """
+
+            news = self.news_update.fetch_news(command)
+            news = self.news_update.parse_news(news)
+            # read the news
+            for n in news:
+                tts(n["publishedAt"])
+                tts(n["title"])
+                tts(n["content"])
+
+        """
         elif "stop" or "exit" in command:
             tts("Goodbye!")
             exit(1)
+        """
