@@ -34,8 +34,9 @@ class NewsUpdate:
 
         parsed_articles = []
         for article in news_data["articles"]:
+            # convert date to day-month-year format in words
             parsed_article = {
-                "publishedAt": article.get("publishedAt"),
+                "publishedAt": article.get("publishedAt").split("T")[0],
                 "title": article.get("title"),
                 "content": article.get("content"),
             }
