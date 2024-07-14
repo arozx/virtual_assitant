@@ -78,7 +78,7 @@ class CommandProcessor:
             # use tts to read the results
             if results:
                 for r in results:
-                    tts(r[0])
+                    self.read(r[0])
 
         elif "reminder" in command:
             self.reminder_system.set_reminder(command)
@@ -95,10 +95,10 @@ class CommandProcessor:
             # split into setup and delivery or just return the joke
             if "..." in joke:
                 setup, delivery = joke.split("... ")
-                tts(setup)
-                tts(delivery)
+                self.read(setup)
+                self.read(delivery)
             else:
-                tts(joke)
+                self.read(joke)
         elif "calculate" in command:
             self.math_operations.calculate(command)
 
@@ -119,12 +119,24 @@ class CommandProcessor:
             news = self.news_update.parse_news(news)
             # read the news
             for n in news:
-                tts(n["publishedAt"])
-                tts(n["title"])
-                tts(n["content"])
+                self.read(n["publishedAt"])
+                self.read(n["title"])
+                self.read(n["content"])
 
         """
         elif "stop" or "exit" in command:
             tts("Goodbye!")
             exit(1)
         """
+
+    def read(self, data: str):
+        # read in new process so that it can be stopped by keyboard interrupt
+        try:
+            tts(data)
+        except KeyboardInterrupt:
+            print("Interrupted")
+            exit(1)
+        except Exception as e:
+            print("Error:", e)
+            tts("Sorry, I couldn't read that.")
+            exit(1)
