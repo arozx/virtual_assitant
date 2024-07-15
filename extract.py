@@ -1,11 +1,17 @@
+import argparse
 import csv
 import json
 
+args = argparse.ArgumentParser()
+# take file path as no --
+args.add_argument("-f", type=str, help="Path to the input text file")
+
 # Define the path to your input text file
-file_path = "GB.txt"
+file_path = "GB.txt"  # default value
+file_path = args.parse_args().f
 
 # Define the path to the output JSON file
-output_file = "places_gb.json"
+output_file = "places.json"
 
 # Initialize an empty dictionary to store results
 gb_places_dict = {}
