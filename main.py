@@ -19,14 +19,15 @@ def main():
     # Load environment variables
     load_dotenv()
     WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
+    NEWS_API_KEY = os.getenv("NEWS_API_KEY")
 
-    web_search = WebSearch(api_key="YOUR_API_KEY")
+    web_search = WebSearch(api_key="NO_API_KEY_FOR_DUCKDUCKGO")
     reminder_system = ReminderSystem()
     todo_list = TodoList()
     weather_update = WeatherUpdate(WEATHER_API_KEY)
     jokes = Jokes()
     math_operations = MathOperations()
-    news_update = NewsUpdate(api_key="YOUR_API_KEY")
+    news_update = NewsUpdate(NEWS_API_KEY)
 
     cp = CommandProcessor(
         voice_recognition=vr,
