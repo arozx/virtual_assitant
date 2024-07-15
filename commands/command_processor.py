@@ -28,8 +28,7 @@ class CommandProcessor:
 
         self.nlp = spacy.load("en_core_web_sm")  # Load the English model
 
-        # Define the path to your JSON file
-        json_file = "places_gb.json"
+        json_file = "places.json"  # Path to the JSON file containing known locations
 
         # Initialize an empty dictionary to store the loaded data
         self.known_locations = {}
